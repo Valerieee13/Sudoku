@@ -156,6 +156,15 @@ public class MySudokuBoard {
       return true;
    }
    
+   public boolean solve() {
+   
+   //TO DO: write a recursive method that uses backtracking to solve sudoku board
+   //that's stored in my 2D array called board
+   
+   return false;
+   
+   }
+   
    //Post: Returns a sudoku board where each number is in its own cell
    public String toString() {
       String sudokuGame = "_____________________________________\n";
