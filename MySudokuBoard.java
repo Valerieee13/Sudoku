@@ -1,7 +1,7 @@
 //Valerie Chavez
 //CS 143
-//HW #2: Sudoku #2
-//This program updates sudokuboard. Adds isValid and isSolved methods
+//HW #3: Sudoku #3 (solve)
+//This program updates adds a solve method that will take an unsolved sudoku board and solve it.
 
 import java.util.*;
 import java.io.*;
@@ -30,6 +30,7 @@ public class MySudokuBoard {
             row++;
          }
       } catch (FileNotFoundException e) {
+         System.out.println("File not found: " + filename);
       }
    }
    
@@ -141,14 +142,14 @@ public class MySudokuBoard {
                return false;
             }
             if (solvedMap.containsKey(value)) {
-               solvedMap.put(value, solvedMap.get(value));
+               solvedMap.put(value, solvedMap.get(value) + 1);
             } else {
                solvedMap.put(value, 1);
             }
          }
       }
       
-      for (char num = '1'; num <=9; num++) {
+      for (char num = '1'; num <= '9'; num++) {
          if (solvedMap.get(num) != 9) {
             return false;
          }
@@ -156,14 +157,38 @@ public class MySudokuBoard {
       return true;
    }
    
+   //Pre: Board is initialized and valid
+   //Post: Returns true if board is solved. Otherwise, returns false
    public boolean solve() {
    
-   //TO DO: write a recursive method that uses backtracking to solve sudoku board
-   //that's stored in my 2D array called board
+      if (!isValid()) {
+         return false;
+      }
+      if (isSolved()) {
+         return true;
+      }
    
-   return false;
-   
+      for (int row = 0; row < 9; row++) {
+         for (int col = 0; col < 9; col++) {
+            if (board[row][col] == '.') {
+            
+               for (int x = 1; x <=9; x++) {
+               
+                  board[row][col] = (char) ('0' + x);
+               
+                  if (isValid() && solve()) {  
+                     return true;
+                  }
+               }
+               
+               board[row][col] = '.';
+               return false;
+            }
+         }
+      }
+      return false;
    }
+   
    
    //Post: Returns a sudoku board where each number is in its own cell
    public String toString() {
@@ -172,7 +197,7 @@ public class MySudokuBoard {
           
          for (int j = 0; j < board[i].length; j++) {
             if (board[i][j] == '.') {
-               sudokuGame += "|   ";
+               sudokuGame += "| . ";
             } else {
                sudokuGame += "| " + board[i][j] + " ";
             }
